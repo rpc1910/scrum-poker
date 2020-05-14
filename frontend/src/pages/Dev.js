@@ -116,8 +116,16 @@ class Dev extends React.Component {
         <AppBar position="relative" color="secondary">
           <Toolbar>
             <MeetingRoomIcon style={{ marginRight: 10 }} />
-            <Typography variant="h6" color="inherit" noWrap>
+            <Typography
+              variant="h6"
+              color="inherit"
+              noWrap
+              style={{ flexGrow: 1 }}
+            >
               Sala {room}
+            </Typography>
+            <Typography variant="h6" color="inherit" noWrap>
+              {name}
             </Typography>
           </Toolbar>
         </AppBar>

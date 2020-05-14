@@ -26,11 +26,7 @@ function FormStartVoting({ room, socket, onStart }) {
 
   return (
     <>
-      <form
-        className={classes.form}
-        onSubmit={handleSubmit(submitHistory)}
-        noValidate
-      >
+      <form className={classes.form} onSubmit={handleSubmit(submitHistory)}>
         <TextField
           inputRef={register}
           variant="outlined"

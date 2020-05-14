@@ -31,7 +31,7 @@ function FormDev({ room }) {
   return (
     <>
       <Typography component="h2" variant="h6">
-        Criar sala
+        Acessar sala
       </Typography>
       <form
         className={classes.form}
