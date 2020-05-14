@@ -11,6 +11,7 @@ function App() {
       <Route path="/" component={Start} exact />
       <Route path="/admin" component={Admin} />
       <Route path="/dev/:room" component={Dev} />
+      <Route path="/join/:room" component={Start} />
     </Router>
   );
 }

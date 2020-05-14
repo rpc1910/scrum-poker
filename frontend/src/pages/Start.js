@@ -6,6 +6,7 @@ import Box from "@material-ui/core/Box";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
+import { useParams, useRouteMatch } from "react-router-dom";
 
 import Copyright from "../components/Copyright";
 import FormAdmin from "../compositions/FormAdmin";
@@ -34,6 +35,10 @@ const useStyles = makeStyles((theme) => ({
 export default function Start() {
   const classes = useStyles();
   const [type, setType] = useState(null);
+  const [defaultRoom, setDefaultRoom] = useState(null);
+
+  const params = useParams();
+  const route = useRouteMatch();
 
   useEffect(() => {
     const profile = sessionStorage.getItem("profile");
@@ -44,8 +49,14 @@ export default function Start() {
     } else if (profile === "dev") {
       window.location.href = `#/dev/${room}`;
     }
-    console.log("finished");
   }, []);
+
+  useEffect(() => {
+    if (route.path !== "/" && params.room) {
+      setDefaultRoom(params.room);
+      setType("dev");
+    }
+  }, [route, params]);
 
   function renderContent() {
     if (type === "admin") {
@@ -62,7 +73,7 @@ export default function Start() {
     } else if (type === "dev") {
       return (
         <>
-          <FormDev />
+          <FormDev room={defaultRoom} />
           <Box mt={3}>
             <Button fullWidth color="primary" onClick={() => setType(null)}>
               Voltar

@@ -11,7 +11,6 @@ import {
   CircularProgress,
 } from "@material-ui/core";
 import MeetingRoomIcon from "@material-ui/icons/MeetingRoom";
-import DeleteIcon from "@material-ui/icons/Delete";
 import { options } from "../config/constants";
 import api from "../services/api";
 import Card from "../components/Card";
@@ -118,7 +117,7 @@ class Dev extends React.Component {
           <Toolbar>
             <MeetingRoomIcon style={{ marginRight: 10 }} />
             <Typography variant="h6" color="inherit" noWrap>
-              Sala ({room})
+              Sala {room}
             </Typography>
           </Toolbar>
         </AppBar>
@@ -131,48 +130,3 @@ class Dev extends React.Component {
 }
 
 export default Dev;
-
-// import React, { useEffect, useMemo } from "react";
-// import socket from "socket.io-client";
-// import api from "../services/api";
-// import { options } from "../config/constants";
-// import events from "../config/events";
-
-// const io = socket(api.defaults.baseURL);
-
-// function Dev() {
-//   const profile = useMemo(() => sessionStorage.getItem("profile"), []);
-//   const room = useMemo(() => sessionStorage.getItem("room"), []);
-//   const name = useMemo(() => sessionStorage.getItem("name"), []);
-
-//   useEffect(() => {
-//     if (room) {
-//       io.emit(events.CONNECTED_ROOM, room);
-//       io.emit(events.CONNECTED_USER, { name, room });
-//     }
-//   }, [room]);
-
-//   useEffect(() => {
-//     io.on(events.START_VOTES, (data) => console.log(data));
-//   }, []);
-
-//   function handleOnClick(vote) {
-//     io.emit(events.USER_VOTE, {
-//       name,
-//       room,
-//       vote,
-//     });
-//   }
-
-//   return (
-//     <div>
-//       {options.map((point) => (
-//         <button key={`point-${point}`} onClick={() => handleOnClick(point)}>
-//           {point}
-//         </button>
-//       ))}
-//     </div>
-//   );
-// }
-
-// export default Dev;

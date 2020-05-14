@@ -2,7 +2,6 @@ const express = require("express");
 const cors = require("cors");
 const http = require("http");
 const socket = require("socket.io");
-const routes = require("./routes");
 const events = require("./config/events");
 
 const app = express();
@@ -30,13 +29,6 @@ io.on("connection", (socket) => {
   });
 });
 
-// app.use((req, res, next) => {
-//   req.io = io;
-//   next();
-// });
-
-// app.use(express.json());
-// app.use(routes);
 app.get("/", (req, res) => res.json({ status: "ok" }));
 
 module.exports = server;

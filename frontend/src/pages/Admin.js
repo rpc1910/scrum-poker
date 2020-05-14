@@ -16,9 +16,11 @@ import {
   ListItemSecondaryAction,
   IconButton,
   Divider,
+  TextField,
 } from "@material-ui/core";
 import MeetingRoomIcon from "@material-ui/icons/MeetingRoom";
 import DeleteIcon from "@material-ui/icons/Delete";
+import styled from "styled-components";
 
 import api from "../services/api";
 import FormStartVoting from "../compositions/FormStartVoting";
@@ -28,6 +30,15 @@ import Card from "../components/Card";
 
 const io = socket(api.defaults.baseURL);
 
+const HeaderContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  .MuiTextField-root {
+    margin-top: -10px;
+  }
+`;
+
 class Admin extends React.Component {
   state = {
     profile: null,
@@ -36,6 +47,7 @@ class Admin extends React.Component {
     users: [],
     showResult: false,
     showCards: false,
+    joinUrl: "",
   };
 
   componentDidMount() {
@@ -46,11 +58,14 @@ class Admin extends React.Component {
     this.checkPermission(profile);
     this.subscribe(room);
 
+    const joinUrl = `${window.location.protocol}//${window.location.host}/#/join/${room}`;
+
     this.setState({
       ...this.state,
       profile,
       name,
       room,
+      joinUrl,
     });
   }
 
@@ -144,15 +159,20 @@ class Admin extends React.Component {
   }
 
   render() {
-    const { room, users, name, showResult } = this.state;
+    const { room, users, name, joinUrl } = this.state;
     return (
       <>
         <CssBaseline />
-        <AppBar position="relative">
+        <AppBar position="static">
           <Toolbar>
             <MeetingRoomIcon style={{ marginRight: 10 }} />
-            <Typography variant="h6" color="inherit" noWrap>
-              {name} ({room})
+            <Typography
+              variant="h6"
+              color="inherit"
+              noWrap
+              style={{ flexGrow: 1 }}
+            >
+              {name} (cod: {room})
             </Typography>
           </Toolbar>
         </AppBar>
@@ -168,7 +188,18 @@ class Admin extends React.Component {
                 />
               </Grid>
               <Grid item xs>
-                <Typography variant="h5">Usuários ({users.length})</Typography>
+                <HeaderContainer>
+                  <Typography variant="h5">
+                    Usuários ({users.length})
+                  </Typography>
+                  <TextField
+                    label="Link para a sala"
+                    value={joinUrl}
+                    inputProps={{ readOnly: true }}
+                    onClick={(e) => e.target.select()}
+                  />
+                </HeaderContainer>
+
                 <Box mt={2}>
                   <List>
                     {users.map((user) => (

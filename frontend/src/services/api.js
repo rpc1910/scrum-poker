@@ -1,8 +1,15 @@
 import axios from "axios";
 
+function getBaseUrl() {
+  if (process.env.REACT_APP_BASE_URL) {
+    return process.env.REACT_APP_BASE_URL;
+  }
+
+  return "http://localhost:3333";
+}
+
 const api = axios.create({
-  // baseURL: "http://localhost:3333",
-  baseURL: "https://scrum-poker-rpc1910.herokuapp.com/",
+  baseURL: getBaseUrl(),
 });
 
 export default api;

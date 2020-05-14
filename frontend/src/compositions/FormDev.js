@@ -16,7 +16,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function FormDev() {
+function FormDev({ room }) {
   const classes = useStyles();
   const history = useHistory();
   const { register, handleSubmit } = useForm();
@@ -58,6 +58,7 @@ function FormDev() {
           id="room"
           label="Código da sala"
           name="room"
+          defaultValue={room}
         />
         <Button
           type="submit"
