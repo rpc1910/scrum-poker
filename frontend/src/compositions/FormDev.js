@@ -33,11 +33,7 @@ function FormDev({ room }) {
       <Typography component="h2" variant="h6">
         Acessar sala
       </Typography>
-      <form
-        className={classes.form}
-        onSubmit={handleSubmit(submitAdmin)}
-        noValidate
-      >
+      <form className={classes.form} onSubmit={handleSubmit(submitAdmin)}>
         <TextField
           inputRef={register}
           variant="outlined"

@@ -34,11 +34,7 @@ function FormAdmin() {
       <Typography component="h2" variant="h6">
         Criar sala
       </Typography>
-      <form
-        className={classes.form}
-        onSubmit={handleSubmit(submitAdmin)}
-        noValidate
-      >
+      <form className={classes.form} onSubmit={handleSubmit(submitAdmin)}>
         <TextField
           inputRef={register}
           variant="outlined"
