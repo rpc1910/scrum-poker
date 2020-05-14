@@ -1,0 +1,8 @@
+{
+  "name": "scrum-poker",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:rpc1910/scrum-poker.git",
+  "author": "Rodrigo Passos <rodrigo.passos25@gmail.com>",
+  "license": "MIT"
+}
