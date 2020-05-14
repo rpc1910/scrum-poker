@@ -3,7 +3,7 @@ const cors = require("cors");
 const http = require("http");
 const socket = require("socket.io");
 const routes = require("./routes");
-const events = require("../../frontend/src/config/events");
+const events = require("./config/events");
 
 const app = express();
 app.use(cors());
