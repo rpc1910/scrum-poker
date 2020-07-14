@@ -12,19 +12,22 @@ const io = socket(server);
 
 io.on("connection", (socket) => {
   socket.on(events.CONNECTED_ROOM, (box) => {
-    console.log("Connected", box);
+    console.log(events.CONNECTED_ROOM, box);
     socket.join(box);
   });
 
   socket.on(events.CONNECTED_USER, (data) => {
+    console.log(events.CONNECTED_USER, data);
     io.sockets.in(data.room).emit(events.CONNECTED_USER, data);
   });
 
-  socket.on(events.USER_VOTE, ({ name, vote, room }) => {
-    io.sockets.in(room).emit(events.USER_VOTE, { name, vote });
+  socket.on(events.USER_VOTE, ({ id, name, vote, room }) => {
+    console.log(events.USER_VOTE, { id, name });
+    io.sockets.in(room).emit(events.USER_VOTE, { id, name, vote });
   });
 
   socket.on(events.START_VOTES, ({ name, room }) => {
+    console.log(events.START_VOTES, name);
     io.sockets.in(room).emit(events.START_VOTES, { name });
   });
 });

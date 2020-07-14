@@ -5,6 +5,7 @@ import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import { useForm } from "react-hook-form";
 import { useHistory } from "react-router-dom";
+import { uuid } from "uuidv4";
 
 const useStyles = makeStyles((theme) => ({
   form: {
@@ -25,6 +26,7 @@ function FormDev({ room }) {
     sessionStorage.setItem("name", name);
     sessionStorage.setItem("room", room);
     sessionStorage.setItem("profile", "dev");
+    sessionStorage.setItem("id", uuid());
     history.push(`/dev/${room}`);
   }
 

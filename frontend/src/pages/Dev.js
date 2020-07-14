@@ -23,6 +23,7 @@ class Dev extends React.Component {
   state = {
     profile: null,
     room: null,
+    id: null,
     name: null,
     history: null,
     vote: null,
@@ -32,13 +33,15 @@ class Dev extends React.Component {
     const profile = sessionStorage.getItem("profile");
     const room = sessionStorage.getItem("room");
     const name = sessionStorage.getItem("name");
+    const id = sessionStorage.getItem("id");
 
     this.checkPermission(profile);
-    this.subscribe(name, room);
+    this.subscribe(id, name, room);
 
     this.setState({
       ...this.state,
       profile,
+      id,
       name,
       room,
     });
@@ -51,10 +54,10 @@ class Dev extends React.Component {
     }
   }
 
-  subscribe(name, room) {
+  subscribe(id, name, room) {
     io.emit(events.CONNECTED_ROOM, room);
 
-    io.emit(events.CONNECTED_USER, { name, room });
+    io.emit(events.CONNECTED_USER, { id, name, room });
 
     io.on(events.START_VOTES, ({ name }) => {
       this.setState({ ...this.state, history: name, vote: null });
@@ -62,8 +65,9 @@ class Dev extends React.Component {
   }
 
   handleSendVote(vote) {
-    const { name, room } = this.state;
+    const { id, name, room } = this.state;
     io.emit(events.USER_VOTE, {
+      id,
       name,
       room,
       vote,

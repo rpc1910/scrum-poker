@@ -17,10 +17,12 @@ import {
   IconButton,
   Divider,
   TextField,
+  Button,
 } from "@material-ui/core";
 import MeetingRoomIcon from "@material-ui/icons/MeetingRoom";
 import DeleteIcon from "@material-ui/icons/Delete";
 import styled from "styled-components";
+import { toast } from "react-toastify";
 
 import api from "../services/api";
 import FormStartVoting from "../compositions/FormStartVoting";
@@ -39,6 +41,14 @@ const HeaderContainer = styled.div`
   }
 `;
 
+const LinkSalaContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  button {
+    margin-left: 5px;
+  }
+`;
+
 class Admin extends React.Component {
   state = {
     profile: null,
@@ -49,6 +59,18 @@ class Admin extends React.Component {
     showCards: false,
     joinUrl: "",
   };
+
+  constructor(props) {
+    super(props);
+
+    this.checkPermission.bind(this);
+    this.subscribe.bind(this);
+    this.checkShowResults.bind(this);
+    this.handleDeleteUser.bind(this);
+    this.handleCopy.bind(this);
+    this.onStartVoting.bind(this);
+    this.renderCards.bind(this);
+  }
 
   componentDidMount() {
     const profile = sessionStorage.getItem("profile");
@@ -79,37 +101,62 @@ class Admin extends React.Component {
   subscribe(room) {
     io.emit(events.CONNECTED_ROOM, room);
 
-    io.on(events.CONNECTED_USER, ({ name }) => {
-      this.setState({
-        ...this.state,
-        users: [...this.state.users, { name, vote: null }],
-      });
+    io.on(events.CONNECTED_USER, ({ id, name }) => {
+      const { users } = this.state;
+      const checkExists = users.find((user) => user.id === id);
+
+      if (!checkExists) {
+        this.setState({
+          ...this.state,
+          users: [...users, { id, name, vote: null }],
+        });
+      }
     });
 
-    io.on(events.USER_VOTE, ({ name, vote }) => {
+    io.on(events.USER_VOTE, ({ id, name, vote }) => {
       const { users } = this.state;
       const listUsers = users.map((user) =>
-        user.name === name ? { ...user, vote } : { ...user }
+        user.id === id ? { ...user, vote } : { ...user }
       );
-
-      const waitVotes = listUsers.filter((user) => user.vote === null);
-      const showResult = waitVotes.length === 0 ? true : false;
 
       this.setState({
         ...this.state,
         users: listUsers,
-        showResult,
       });
+
+      this.checkShowResults();
     });
   }
 
-  handleDeleteUser({ name }) {
+  checkShowResults() {
+    setTimeout(() => {
+      const { users } = this.state;
+
+      const waitVotes = users.filter((user) => user.vote === null);
+      const showResult = waitVotes.length === 0 ? true : false;
+
+      this.setState({
+        showResult,
+      });
+    }, 200);
+  }
+
+  handleDeleteUser({ id }) {
     const { users } = this.state;
-    const filteredUsers = users.filter((user) => user.name !== name);
+    const filteredUsers = users.filter((user) => user.id !== String(id));
+
     this.setState({
       ...this.state,
       users: filteredUsers,
     });
+
+    this.checkShowResults();
+  }
+
+  handleCopy() {
+    document.getElementById("input-link").select();
+    document.execCommand("copy");
+    toast.info("😍 Endereço copiado");
   }
 
   onStartVoting() {
@@ -138,7 +185,7 @@ class Admin extends React.Component {
               <Box mt={4}>
                 <Grid container justify="center" spacing={5}>
                   {users.map((user) => (
-                    <Grid item key={`card-${user.name}`} align="center">
+                    <Grid item key={`card-${user.id}`} align="center">
                       <Card
                         frontText="?"
                         backText={user.vote}
@@ -192,18 +239,29 @@ class Admin extends React.Component {
                   <Typography variant="h5">
                     Usuários ({users.length})
                   </Typography>
-                  <TextField
-                    label="Link para a sala"
-                    value={joinUrl}
-                    inputProps={{ readOnly: true }}
-                    onClick={(e) => e.target.select()}
-                  />
+                  <LinkSalaContainer>
+                    <TextField
+                      label="Link para a sala"
+                      value={joinUrl}
+                      inputProps={{ readOnly: true }}
+                      onClick={(e) => e.target.select()}
+                      id="input-link"
+                    />
+                    <Button
+                      onClick={this.handleCopy}
+                      variant="outlined"
+                      size="small"
+                      color="primary"
+                    >
+                      Copiar
+                    </Button>
+                  </LinkSalaContainer>
                 </HeaderContainer>
 
                 <Box mt={2}>
                   <List>
                     {users.map((user) => (
-                      <ListItem key={`user-${user.name}`} divider>
+                      <ListItem key={`user-${user.id}`} divider>
                         <ListItemAvatar>
                           <Avatar>{user.name.substr(0, 1)}</Avatar>
                         </ListItemAvatar>
