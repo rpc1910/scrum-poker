@@ -49,6 +49,11 @@ const LinkSalaContainer = styled.div`
   }
 `;
 
+const BoxInline = styled.div`
+  display: flex;
+  flex-direction: row;
+`;
+
 class Admin extends React.Component {
   state = {
     profile: null,
@@ -70,6 +75,7 @@ class Admin extends React.Component {
     this.handleCopy.bind(this);
     this.onStartVoting.bind(this);
     this.renderCards.bind(this);
+    this.handleShowCards.bind(this);
   }
 
   componentDidMount() {
@@ -159,6 +165,12 @@ class Admin extends React.Component {
     toast.info("😍 Endereço copiado");
   }
 
+  handleShowCards(ref) {
+    ref.setState({
+      showResult: true,
+    });
+  }
+
   onStartVoting() {
     const { users } = this.state;
     const cleanedUsers = users.map((user) => ({ ...user, vote: null }));
@@ -179,7 +191,18 @@ class Admin extends React.Component {
         <Grid item xs={12}>
           <Divider />
           <Box mt={5}>
-            <Typography variant="h5">Pontuação</Typography>
+            <BoxInline>
+              <Typography variant="h5">Pontuação</Typography>
+              <Button
+                onClick={() => this.handleShowCards(this)}
+                variant="outlined"
+                size="small"
+                color="primary"
+                style={{ marginLeft: 20 }}
+              >
+                Exibir pontuação
+              </Button>
+            </BoxInline>
 
             <Box>
               <Box mt={4}>
@@ -188,7 +211,7 @@ class Admin extends React.Component {
                     <Grid item key={`card-${user.id}`} align="center">
                       <Card
                         frontText="?"
-                        backText={user.vote}
+                        backText={user.vote || "🗣"}
                         checked={!!user.vote}
                         open={showResult}
                       />
