@@ -167,7 +167,7 @@ class Admin extends React.Component {
 
   handleShowCards(ref) {
     ref.setState({
-      showResult: true,
+      showResult: !ref.state.showResult,
     });
   }
 
@@ -200,7 +200,7 @@ class Admin extends React.Component {
                 color="primary"
                 style={{ marginLeft: 20 }}
               >
-                Exibir pontuação
+                {showResult ? "Ocultar" : "Exibir"} pontuação
               </Button>
             </BoxInline>
 
