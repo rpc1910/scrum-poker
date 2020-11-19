@@ -120,7 +120,9 @@ class Admin extends React.Component {
     });
 
     io.on(events.USER_VOTE, ({ id, name, vote }) => {
-      const { users } = this.state;
+      const { users, showResult } = this.state;
+      if (showResult) return;
+
       const listUsers = users.map((user) =>
         user.id === id ? { ...user, vote } : { ...user }
       );
